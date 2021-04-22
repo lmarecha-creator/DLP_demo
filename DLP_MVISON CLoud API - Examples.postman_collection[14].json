@@ -1,0 +1,1305 @@
+{
+	"info": {
+		"_postman_id": "c178a520-abbc-485d-ffb4-54c5af2edc52",
+		"name": "Skyhigh API - Examples",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	AKIAZ7WUZMG7B6UJG2VZ
+	Secret >Key : Rh1zvOWxcCQrfToaeVj60srRt+x8xkFmRoYin+xD
+	"item": [
+		{
+			"name": "1 Authenticate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a31577e9-5f95-4ce9-a49e-c7d013ba7d9e",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"access_token\"] = responseBody.has(\"access_token\");",
+							"tests[\"refresh_token\"] = responseBody.has(\"refresh_token\");",
+							"tests[\"tenantID\"] = responseBody.has(\"tenantID\");",
+							"var rJson = JSON.parse(responseBody);",
+							"",
+							"pm.environment.set(\"tenant-id\", rJson.tenantID);",
+							"pm.environment.set(\"access-token\", rJson.access_token);",
+							"pm.environment.set(\"refresh-token\", rJson.refresh_token);",
+							"pm.environment.set(\"user\", rJson.user);",
+							"console.log(\"variable tenant-id set to: \", rJson.tenantID);",
+							"console.log(\"variable access_token set to: \", rJson.access_token);",
+							"console.log(\"variable refresh_token set to: \", rJson.refresh_token);",
+							"console.log(\"variable user set to: \", rJson.user);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Auth-Username",
+						"value": "{{username}}"
+					},
+					{
+						"key": "X-Auth-Password",
+						"value": "{{password}}"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://{{fabric}}/neo/neo-auth-service/oauth/token?grant_type=password",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"neo",
+						"neo-auth-service",
+						"oauth",
+						"token"
+					],
+					"query": [
+						{
+							"key": "grant_type",
+							"value": "password"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Incident detailed search API",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}",
+						"type": "text"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"query_request\": {\n        \"sort_dimensions\": [\n            {\n                \"field\": \"created_on_date\",\n                \"order\": \"desc\"\n            }\n        ],\n        \"pagination\": {\n            \"offset\": 0,\n            \"limit\": 10\n        },\n        \"search_query\": {\n            \"type\": \"and_search_query\",\n            \"queries\": [\n                {\n                    \"type\": \"equal_search_query\",\n                    \"value\": \"1_ Credit Card Numbers / PCI\",\n                    \"field\": \"incident_detail.content.policy_result.policy_name\"\n                },\n                {\n                    \"type\": \"between_search_query\",\n                    \"field\": \"created_on_date\",\n                    \"lower_bound\": \"2019-09-08T00:00:00.000+00:00\",\n                    \"upper_bound\": \"2019-10-25T23:59:59.999+00:00\"\n                }\n            ]\n        },\n        \"timezone\": \"UTC\"\n    },\n    \"add_default_filters\": false,\n    \"incident_types\": [\n        0,\n        3,\n        4\n    ]\n}"
+				},
+				"url": {
+					"raw": "https://{{fabric}}/neo/watchtower/ui/v1/{{tenant-id}}/incident/search",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"neo",
+						"watchtower",
+						"ui",
+						"v1",
+						"{{tenant-id}}",
+						"incident",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Incident Details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}",
+						"type": "text"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://www.myshn.net/neo/watchtower/ui/v1/77231/incident/0:77231:3210:61e2902698c398f609299134634c524f7d6fa249:5a5dedaba15c75f0795769a75d6ad03c31367cd3:248532:1571221146231",
+					"protocol": "https",
+					"host": [
+						"www",
+						"myshn",
+						"net"
+					],
+					"path": [
+						"neo",
+						"watchtower",
+						"ui",
+						"v1",
+						"77231",
+						"incident",
+						"0:77231:3210:61e2902698c398f609299134634c524f7d6fa249:5a5dedaba15c75f0795769a75d6ad03c31367cd3:248532:1571221146231"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Incident Update fields",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}",
+						"type": "text"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"tenant_id\": 77231,\n        \"incident_id\": \"0:77231:3210:61e2902698c398f609299134634c524f7d6fa249:5a5dedaba15c75f0795769a75d6ad03c31367cd3:248532:1571221146231\",\n        \"user_info\": {\n            \"id\": 6898,\n            \"name\": \"Admin Zengel\",\n            \"email\": \"{{username}}\",\n            \"user_type\": \"ADMIN\"\n        },\n        \"update_fields\": [\n            {\n                \"name\": \"status\",\n                \"old_value\": \"\\\"archived\\\"\",\n                \"new_value\": \"\\\"false positive\\\"\"\n            }\n        ]\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://www.myshn.net/neo/watchtower/ui/v1/77231/bulk/incident",
+					"protocol": "https",
+					"host": [
+						"www",
+						"myshn",
+						"net"
+					],
+					"path": [
+						"neo",
+						"watchtower",
+						"ui",
+						"v1",
+						"77231",
+						"bulk",
+						"incident"
+					]
+				},
+				"description": "e.g. set status"
+			},
+			"response": []
+		},
+		{
+			"name": "Services Count Yesterday",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"searchExpression\": {\r\n\t\t\"type\": \"and\",\r\n\t\t\"expressions\": [{\r\n\t\t\t\t\"type\": \"eq\",\r\n\t\t\t\t\"typeId\": \"RISK\",\r\n\t\t\t\t\"parentId\": null,\r\n\t\t\t\t\"values\": [\"high\"]\r\n\t\t\t}\r\n\t\t]\r\n\t},\r\n\t\"dateCriteria\": {\r\n\t\t\"presetRange\": \"LAST_YEAR\"\r\n\t},\r\n\t\"sortCriteria\": {\r\n\t\t\"sortColumn\": \"uploadBytes\",\r\n\t\t\"sortAscending\": false\r\n\t},\r\n\t\"pageCriteria\": {\r\n\t\t\"startIndex\": 0,\r\n\t\t\"numRecords\": 40\r\n\t}\r\n}"
+				},
+				"url": {
+					"raw": "https://{{fabric}}/neo/events-analytics-service/v1/servicesCount",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"neo",
+						"events-analytics-service",
+						"v1",
+						"servicesCount"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Services Count High Risk",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"searchExpression\": {\r\n\t\t\"type\": \"and\",\r\n\t\t\"expressions\": [{\r\n\t\t\t\t\"type\": \"eq\",\r\n\t\t\t\t\"typeId\": \"RISK\",\r\n\t\t\t\t\"parentId\": null,\r\n\t\t\t\t\"values\": [\"high\"]\r\n\t\t\t}\r\n\t\t]\r\n\t},\r\n\t\"dateCriteria\": {\r\n\t\t\"presetRange\": \"LAST_YEAR\"\r\n\t},\r\n\t\"sortCriteria\": {\r\n\t\t\"sortColumn\": \"uploadBytes\",\r\n\t\t\"sortAscending\": false\r\n\t},\r\n\t\"pageCriteria\": {\r\n\t\t\"startIndex\": 0,\r\n\t\t\"numRecords\": 40\r\n\t}\r\n}"
+				},
+				"url": {
+					"raw": "https://{{fabric}}/neo/events-analytics-service/v1/servicesCount",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"neo",
+						"events-analytics-service",
+						"v1",
+						"servicesCount"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Services Allowing anonymous use",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "PASSWORD",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "USERNAME",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}\r\n"
+				},
+				"url": {
+					"raw": "https://shnpoc.myshn.net/shndlpapi/v1/dcube/edit/2050/1/GENERATE_INDEX",
+					"protocol": "https",
+					"host": [
+						"shnpoc",
+						"myshn",
+						"net"
+					],
+					"path": [
+						"shndlpapi",
+						"v1",
+						"dcube",
+						"edit",
+						"2050",
+						"1",
+						"GENERATE_INDEX"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Services by Date",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"searchExpression\": {\n\t\t\"type\": \"and\",\n\t\t\"expressions\": [{\n\t\t\t\t\"type\": \"eq\",\n\t\t\t\t\"typeId\": \"SVC_ACCESS_DT\",\n\t\t\t\t\"parentId\": \"active\",\n\t\t\t\t\"values\": [\"new\"]\n\t\t\t}\n\t\t]\n\t},\n\t\"dateCriteria\": {\n\t\t\"datasetId\": 2007,\n\t\t\"fromTime\": 1536451200000,\n\t\t\"toTime\": 1551398399000,\n\t\t\"userPreferenceDateId\": 1,\n\t\t\"presetRange\": \"DEFAULT\",\n\t\t\"timezone\": null\n\t},\n\t\"sortCriteria\": {\n\t\t\"sortAscending\": false,\n\t\t\"sortColumn\": \"serviceFirstAccessDate\"\n\t},\n\t\"pageCriteria\": {\n\t\t\"startIndex\": 0,\n\t\t\"numRecords\": 100\n\t}\n}\n"
+				},
+				"url": {
+					"raw": "https://{{fabric}}/neo/events-analytics-service/v1/searchSummary",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"neo",
+						"events-analytics-service",
+						"v1",
+						"searchSummary"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "High Risk Services last calendar month",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"searchExpression\": {\r\n\t\t\"type\": \"and\",\r\n\t\t\"expressions\": [{\r\n\t\t\t\t\"type\": \"eq\",\r\n\t\t\t\t\"typeId\": \"RISK\",\r\n\t\t\t\t\"parentId\": null,\r\n\t\t\t\t\"values\": [\"high\"]\r\n\t\t\t}\r\n\t\t]\r\n\t},\r\n\t\"dateCriteria\": {\r\n\t\t\"datasetId\": 2009,\r\n\t\t\"presetRange\": \"LAST_CAL_MONTH\",\r\n\t\t\"userPreferenceDateId\": 1\r\n\t},\r\n\t\"sortCriteria\": {\r\n\t\t\"sortColumn\": \"uploadBytes\",\r\n\t\t\"sortAscending\": false\r\n\t},\r\n\t\"pageCriteria\": {\r\n\t\t\"startIndex\": 0,\r\n\t\t\"numRecords\": 100\r\n\t}\r\n}\r\n"
+				},
+				"url": {
+					"raw": "https://{{fabric}}/neo/events-analytics-service/v1/searchSummary",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"neo",
+						"events-analytics-service",
+						"v1",
+						"searchSummary"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Users last calendar month by service count",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"var rJson = pm.response.json();",
+							"firstUser = rJson[0]",
+							"console.log(\"first user record\", firstUser);",
+							"firstUserId = firstUser[\"detectedUserId\"]",
+							"console.log(\"first user id\", firstUserId);",
+							"pm.environment.set(\"queryuserid\", firstUserId);",
+							"console.log(\"set variable queryuserid to\",firstUserId)"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"searchExpression\": {\r\n\t\t\"type\": \"and\",\r\n\t\t\"expressions\": []\r\n\t},\r\n\t\"dateCriteria\": {\r\n\t\t\"datasetId\": 2009,\r\n\t\t\"presetRange\": \"LAST_CAL_MONTH\",\r\n\t\t\"userPreferenceDateId\": 1\r\n\t},\r\n\t\"sortCriteria\": {\r\n\t\t\"sortColumn\": \"serviceCount\",\r\n\t\t\"sortAscending\": false\r\n\t},\r\n\t\"pageCriteria\": {\r\n\t\t\"startIndex\": 0,\r\n\t\t\"numRecords\": 10\r\n\t}\r\n}\r\n"
+				},
+				"url": {
+					"raw": "https://{{fabric}}/neo/events-analytics-service/v1/detectedUsers",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"neo",
+						"events-analytics-service",
+						"v1",
+						"detectedUsers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User Details",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"searchExpression\": {\r\n\t\t\"type\": \"and\",\r\n\t\t\"expressions\": []\r\n\t},\r\n\t\"dateCriteria\": {\r\n\t\t\"datasetId\": 2009,\r\n\t\t\"presetRange\": \"LAST_CAL_MONTH\",\r\n\t\t\"userPreferenceDateId\": 1\r\n\t},\r\n\t\"sortCriteria\": {\r\n\t\t\"sortColumn\": \"serviceCount\",\r\n\t\t\"sortAscending\": false\r\n\t},\r\n\t\"pageCriteria\": {\r\n\t\t\"startIndex\": 0,\r\n\t\t\"numRecords\": 40\r\n\t}\r\n}\r\n"
+				},
+				"url": {
+					"raw": "https://{{fabric}}/neo/events-analytics-service/v1/detectedUserSecondaryInfo/{{queryuserid}}",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"neo",
+						"events-analytics-service",
+						"v1",
+						"detectedUserSecondaryInfo",
+						"{{queryuserid}}"
+					]
+				},
+				"description": "requires a userid from a query of detectedUsers"
+			},
+			"response": []
+		},
+		{
+			"name": "Custom Attributes",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}"
+					}
+				],
+				"url": {
+					"raw": "https://{{fabric}}/neo/events-analytics-service/v1/customAttributeColumns",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"neo",
+						"events-analytics-service",
+						"v1",
+						"customAttributeColumns"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registry Attributes",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"pageName\": \"125\",\r\n\t\"searchQuery\": {\r\n\t\t\"searchExpression\": {\r\n\t\t\t\"type\": \"and\",\r\n\t\t\t\"expressions\": [{\r\n\t\t\t\t\t\"type\": \"eq\",\r\n\t\t\t\t\t\"typeId\": \"USR_SRCH\",\r\n\t\t\t\t\t\"parentId\": null,\r\n\t\t\t\t\t\"values\": [\"Theon Lovejoy\"]\r\n\t\t\t\t}\r\n\t\t\t]\r\n\t\t},\r\n\t\t\"dateCriteria\": {\r\n\t\t\t\"datasetId\": 2009,\r\n\t\t\t\"fromTime\": 1514764800000,\r\n\t\t\t\"toTime\": 1517443199000,\r\n\t\t\t\"presetRange\": \"LAST_CAL_MONTH\",\r\n\t\t\t\"userPreferenceDateId\": 1\r\n\t\t},\r\n\t\t\"sortCriteria\": {\r\n\t\t\t\"sortColumn\": \"uploadBytes\",\r\n\t\t\t\"sortAscending\": false\r\n\t\t},\r\n\t\t\"pageCriteria\": {\r\n\t\t\t\"startIndex\": 0,\r\n\t\t\t\"numRecords\": 40\r\n\t\t}\r\n\t}\r\n}\r\n"
+				},
+				"url": {
+					"raw": "https://{{fabric}}/neo/events-analytics-service/v1/facet/serviceAttributes",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"neo",
+						"events-analytics-service",
+						"v1",
+						"facet",
+						"serviceAttributes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Groups by device from collector",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "PASSWORD",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "USERNAME",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://shnpoc-collector.myshn.net/logimporterapp/v1/deviceSnapshot?deviceId=12&index=0&limit=1000",
+					"protocol": "https",
+					"host": [
+						"shnpoc-collector",
+						"myshn",
+						"net"
+					],
+					"path": [
+						"logimporterapp",
+						"v1",
+						"deviceSnapshot"
+					],
+					"query": [
+						{
+							"key": "deviceId",
+							"value": "12"
+						},
+						{
+							"key": "index",
+							"value": "0"
+						},
+						{
+							"key": "limit",
+							"value": "1000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ServiceGroup Urls from collector",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{username}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}"
+					}
+				],
+				"url": {
+					"raw": "https://shnpoc-collector.myshn.net/logimporterapp/v1/deviceSnapshot?deviceId=1&index=0&limit=1000",
+					"protocol": "https",
+					"host": [
+						"shnpoc-collector",
+						"myshn",
+						"net"
+					],
+					"path": [
+						"logimporterapp",
+						"v1",
+						"deviceSnapshot"
+					],
+					"query": [
+						{
+							"key": "deviceId",
+							"value": "1"
+						},
+						{
+							"key": "index",
+							"value": "0"
+						},
+						{
+							"key": "limit",
+							"value": "1000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TenantServiceGroups",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}"
+					}
+				],
+				"url": {
+					"raw": "https://{{fabric}}/neo/service-workflow/v1/tenantServiceGroups",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"neo",
+						"service-workflow",
+						"v1",
+						"tenantServiceGroups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ServiceGroups",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}"
+					}
+				],
+				"url": {
+					"raw": "https://{{fabric}}/neo/service-workflow/v1/serviceGroups",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"neo",
+						"service-workflow",
+						"v1",
+						"serviceGroups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Device GroupInfo",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}"
+					}
+				],
+				"url": {
+					"raw": "https://{{fabric}}/neo/service-workflow/v1/deviceServiceGroupInfo?deviceIdList=1,12,2,15,5,6",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"neo",
+						"service-workflow",
+						"v1",
+						"deviceServiceGroupInfo"
+					],
+					"query": [
+						{
+							"key": "deviceIdList",
+							"value": "1,12,2,15,5,6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Device Configuration",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}"
+					}
+				],
+				"url": {
+					"raw": "https://{{fabric}}/neo/service-workflow/v1/deviceConfigurationInfo",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"neo",
+						"service-workflow",
+						"v1",
+						"deviceConfigurationInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ServiceGroup Urls",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}"
+					}
+				],
+				"url": {
+					"raw": "https://{{fabric}}/neo/service-workflow/v1/deviceSnapshot?tenantId={{tenantId}}&deviceId=1&index=0&limit=1000",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"neo",
+						"service-workflow",
+						"v1",
+						"deviceSnapshot"
+					],
+					"query": [
+						{
+							"key": "tenantId",
+							"value": "{{tenantId}}"
+						},
+						{
+							"key": "deviceId",
+							"value": "1"
+						},
+						{
+							"key": "index",
+							"value": "0"
+						},
+						{
+							"key": "limit",
+							"value": "1000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Creation API",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "Abcd_1234",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "dlp_auto_sales@shn.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n  {\r\n    \"firstName\":\"andy\",\r\n    \"lastName\":\"Zetti\",\r\n    \"email\":\"sone.other@zengel.biz\",\r\n    \"roleIds\":[100,101,102,103,104,105,109,111],\r\n    \"userViewId\":10,\r\n    \"userReadOnly\":true\r\n     }\r\n]"
+				},
+				"url": {
+					"raw": "https://www.myshn.net/shnapi/rest/user/createUser",
+					"protocol": "https",
+					"host": [
+						"www",
+						"myshn",
+						"net"
+					],
+					"path": [
+						"shnapi",
+						"rest",
+						"user",
+						"createUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get list of managed AWS accounts",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "0be8c3f3-89da-4311-a71e-830a85e84ecb.E8F9BEE8042CB8C165415B3EDFB35CAE.sandbox-dash02.4512"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsic3ByaW5nLWJvb3QtYXBwbGljYXRpb24iXSwidGVuYW50TmFtZSI6IlplbmdlbCIsInVzZXJfbmFtZSI6ImFkbWluQHplbmdlbC5iaXoiLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwidGVuYW50SUQiOjIzODksImV4cCI6MTU0NDE5OTkyMiwidXNlciI6ImFkbWluQHplbmdlbC5iaXoiLCJ1c2VySWQiOjQ1MTIsImp0aSI6ImNmOGY1YmRmLTgxYzUtNDVhNi1hN2ZkLWE3OGZmMGExN2E3YiIsImVtYWlsIjoiYWRtaW5AemVuZ2VsLmJpeiIsImNsaWVudF9pZCI6InRydXN0ZWQtYXBwIn0.CwoWbaq21CEEGFFsws9VnIGMLxG71AmjDVA4G7aOT9BTuWM5LY1A9wB9FNDwvAKgkuTKPeoCUxxCgJjJoUKSndkSqtLjmQlFb_A4SmiSmCW-Z-f5C-BwJJlvJekVG4bHZlE5qTnxSHhK_Vjro_m1GRCOtrj2MSMampcTVxpdiow"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://shnpoc.myshn.net/neo/config-audit/v2/apiConfig/2049",
+					"protocol": "https",
+					"host": [
+						"shnpoc",
+						"myshn",
+						"net"
+					],
+					"path": [
+						"neo",
+						"config-audit",
+						"v2",
+						"apiConfig",
+						"2049"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Omnibar Service Search",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}",
+						"type": "text"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"searchString\": \"aws\",\n    \"pageContext\": {\n        \"pageName\": \"137\"\n    }\n}"
+				},
+				"url": {
+					"raw": "https://shnpoc.myshn.net/neo/events-analytics-service/v1/omnibarLookup",
+					"protocol": "https",
+					"host": [
+						"shnpoc",
+						"myshn",
+						"net"
+					],
+					"path": [
+						"neo",
+						"events-analytics-service",
+						"v1",
+						"omnibarLookup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Audit Log query",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}",
+						"type": "text"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"pageCriteria\": {\n        \"startIndex\": 0,\n        \"numRecords\": 200\n    },\n    \"sortCriteria\": {\n        \"sortColumn\": \"timestamp\",\n        \"sortAscending\": false\n    },\n    \"dateCriteria\": {\n        \"presetRange\": \"ALL_DATA\"\n    },\n    \"searchString\": \"\",\n    \"eventCategories\": [],\n    \"events\": [],\n    \"userIds\": []\n}"
+				},
+				"url": {
+					"raw": "https://{{fabric}}/neo/shnadmin-service/v1/auditService/auditEventsSummary",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"neo",
+						"shnadmin-service",
+						"v1",
+						"auditService",
+						"auditEventsSummary"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Audit Log query CSV - legacy",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "{{username}}",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"auditFilter\": {\n        \"dataSetId\": -1,\n        \"match\": null,\n        \"eventTypes\": 1,\n        \"fromTime\": 1425301837000,\n        \"toTime\": null\n    }\n}"
+				},
+				"url": {
+					"raw": "https://{{fabric}}/shnapi/rest/reporting/csv/queryAuditTrails",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"shnapi",
+						"rest",
+						"reporting",
+						"csv",
+						"queryAuditTrails"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Shadow Anomalies all",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "{{username}}",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"templateId\": 10,\n    \"tableVisbilityMap\": {\n        \"Severity\": true,\n        \"Service Name\": true,\n        \"Date / Time\": true,\n        \"Anomaly Type\": true,\n        \"Activity Type\": true,\n        \"Response\": true,\n        \"User Risk Level\": true,\n        \"User / IP Address\": true,\n        \"Anomaly Value\": true,\n        \"Threshold\": true,\n        \"Destination Host\": true\n    }\n}"
+				},
+				"url": {
+					"raw": "https://{{fabric}}/shnapi/rest/reporting/csv/queryAnomalies",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"shnapi",
+						"rest",
+						"reporting",
+						"csv",
+						"queryAnomalies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Shadow Anomalies get type map",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "{{username}}",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{fabric}}/shnapi/rest/reporting/csv/queryAnomalyTypeMap",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"shnapi",
+						"rest",
+						"reporting",
+						"csv",
+						"queryAnomalyTypeMap"
+					]
+				},
+				"description": "retrieves the types of anomalies available"
+			},
+			"response": []
+		},
+		{
+			"name": "Policy Templates Query",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}",
+						"type": "text"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}",
+						"type": "text"
+					},
+					{
+						"key": "x-auth-token",
+						"value": "7d1cf2d2-6d63-4276-8c42-83eabc97ee52.1D7C4A2912A7353549F64C16CCCF4CC2.dashboardext-0ca68947148182e71.6898",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"searchQuery\": {\n        \"searchExpression\": {\n            \"type\": \"and\",\n            \"expressions\": [\n                {\n                    \"type\": \"eq\",\n                    \"typeId\": \"CAT_VAL\",\n                    \"values\": [\n                        \"2004\"\n                    ]\n                }\n            ]\n        },\n        \"sortCriteria\": {\n            \"ascending\": true,\n            \"field\": \"count\"\n        },\n        \"pageCriteria\": null\n    }\n}"
+				},
+				"url": {
+					"raw": "https://{{fabric}}/neo/shndlpapi/v1/policy-templates/search",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"neo",
+						"shndlpapi",
+						"v1",
+						"policy-templates",
+						"search"
+					]
+				},
+				"description": "Serahc for policy templates"
+			},
+			"response": []
+		},
+		{
+			"name": "Policy Query Config Audit",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "{{access-token}}",
+						"type": "text"
+					},
+					{
+						"key": "x-refresh-token",
+						"value": "{{refresh-token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"searchRequest\": {\n        \"policyStatus\": [],\n        \"policyType\": [],\n        \"policyIds\": [],\n        \"policyCategory\": [],\n        \"cisLevels\": [],\n        \"cspIds\": [],\n        \"start\": 0,\n        \"limit\": 500,\n        \"sortOrder\": \"desc\",\n        \"sortBy\": \"edittime\"\n    }\n}"
+				},
+				"url": {
+					"raw": "https://{{fabric}}/neo/config-audit/v1/getPolicies",
+					"protocol": "https",
+					"host": [
+						"{{fabric}}"
+					],
+					"path": [
+						"neo",
+						"config-audit",
+						"v1",
+						"getPolicies"
+					]
+				},
+				"description": "Query the policies for the tenant"
+			},
+			"response": []
+		}
+	]
+}
